@@ -1,0 +1,10 @@
+{
+  "name": "parmenides",
+  "version": "0.1.0",
+  "description": "Find drift between dev, staging and production, ranked by risk. Never prints a secret.",
+  "author": { "name": "senavoh", "url": "https://github.com/senavoh" },
+  "homepage": "https://parmenides.dev",
+  "repository": "https://github.com/senavoh/parmenides",
+  "license": "MIT",
+  "keywords": ["drift", "devops", "staging", "production", "config", "environments", "release"]
+}

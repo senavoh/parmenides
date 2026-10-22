@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.log
+.DS_Store
+assets/drafts/
+.claude/
+.taste-skill/
+site/_concepts/

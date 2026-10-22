@@ -1,0 +1,7 @@
+{
+  "features": { "newCheckout": true, "guestCheckout": true },
+  "http": { "timeoutMs": 10000, "retries": 3 },
+  "cors": { "origins": ["https://staging.shop.example.test"] },
+  "session": { "cookieSecure": true, "maxAgeHours": 24 },
+  "db": { "poolSize": 10 }
+}

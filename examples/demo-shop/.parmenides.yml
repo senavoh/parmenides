@@ -1,0 +1,5 @@
+expected:
+  - LOG_LEVEL
+  - "*_URL"
+  - EMAIL_FROM
+  - replicas

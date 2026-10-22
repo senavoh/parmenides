@@ -1,0 +1,12 @@
+name: Deploy staging
+on: { push: { branches: [staging] } }
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm test
+      - run: npm run migrate
+      - run: ./scripts/deploy.sh staging

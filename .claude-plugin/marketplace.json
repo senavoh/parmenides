@@ -1,0 +1,11 @@
+{
+  "name": "parmenides",
+  "owner": { "name": "senavoh", "url": "https://github.com/senavoh" },
+  "plugins": [
+    {
+      "name": "parmenides",
+      "source": "./",
+      "description": "Find drift between dev, staging and production, ranked by risk. Never prints a secret."
+    }
+  ]
+}

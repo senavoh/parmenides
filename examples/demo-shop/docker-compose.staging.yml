@@ -1,0 +1,9 @@
+services:
+  app:
+    build: { context: ., dockerfile: Dockerfile }
+    env_file: .env.staging
+    deploy: { replicas: 1 }
+  db:
+    image: postgres:16.4
+  cache:
+    image: redis:7.4
