@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parmenides — what is, is one</title>
+<meta name="description" content="An open-source agent skill that finds every drift between dev, staging and production, ranks it by risk, and never prints a secret. Claude Code, Codex, Cursor, Gemini CLI, OpenCode.">
+<meta name="theme-color" content="#1c1814">
+<link rel="canonical" href="https://parmenides.dev/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://parmenides.dev/">
+<meta property="og:title" content="Parmenides — what is, is one">
+<meta property="og:description" content="Find every drift between dev, staging and production, ranked by risk. Never prints a secret.">
+<meta property="og:image" content="https://parmenides.dev/parmenides.png">
+<link rel="icon" href="parmenides.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="hero" id="top">
+  <nav class="nav" aria-label="Primary">
+    <a class="wordmark" href="#top">PARMENIDES</a>
+    <ul>
+      <li><a href="#example">The example</a></li>
+      <li><a href="#checks">What it checks</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a class="star" data-gh href="https://github.com/senavoh/parmenides">GitHub <span data-stars></span></a></li>
+    </ul>
+  </nav>
+  <div class="hero__grid">
+    <div class="hero__copy">
+      <h1 class="tiled" data-lines="WHAT IS,|IS ONE." data-alt="1"><span class="tiled__text">What is, is one.</span></h1>
+      <p class="hero__sub">An agent skill that finds every drift between dev, staging and production, and ranks it by risk. It never prints a secret.</p>
+      <div class="cmd">
+        <code><span aria-hidden="true">$ </span><span data-cmd="npx">npx skills add senavoh/parmenides</span></code>
+        <button class="copy" type="button" data-copy-from="npx" aria-label="Copy install command">Copy</button>
+      </div>
+      <p class="hero__meta">Then ask your agent: “Is staging the same as prod?”</p>
+    </div>
+    <figure class="portrait">
+      <img src="parmenides.png" width="600" height="600" alt="Parmenides as a Greek floor mosaic, eyes closed, unbothered">
+      <figcaption>Parmenides of Elea, unbothered since 475 BC.</figcaption>
+    </figure>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- AGENTS -->
+<section class="agents" aria-labelledby="agents-h">
+  <h2 id="agents-h" class="sr-only">Works with every agent</h2>
+  <p>Works in the agent you already use</p>
+  <ul>
+    <li>Claude Code</li><li>Codex</li><li>Cursor</li><li>Gemini CLI</li><li>OpenCode</li>
+  </ul>
+  <p class="agents__fine">A skill, not a service. No API key, no account, nothing to host.</p>
+</section>
+
+<!-- WHY -->
+<section class="sec why" aria-labelledby="why-h">
+  <div class="why__copy">
+    <h2 id="why-h" class="h2">“It works in staging.”</h2>
+    <p class="lede">The most expensive sentence in software. Production is missing an env var, runs an older Node, talks to a different Postgres, or skips the migration step. Nobody notices until it breaks.</p>
+  </div>
+  <blockquote class="quote">
+    <p>Parmenides held that what truly is, is one and unchanging, and that change is an illusion of mortal opinion.</p>
+    <p class="quote__punch">Your environments are supposed to be one thing too. This skill finds where they are not.</p>
+  </blockquote>
+</section>
+
+<!-- EXAMPLE: the two roads -->
+<section class="sec example" id="example" aria-labelledby="ex-h">
+  <div class="ex__head">
+    <h2 id="ex-h" class="h2">The two roads.</h2>
+    <p class="lede">In his poem, a goddess shows him two roads: the Way of Truth and the Way of Opinion. His report follows them. This is a real, unedited run on a demo app with eight drifts planted on purpose. It found all eight.</p>
+  </div>
+  <div class="roads">
+    <article class="road road--truth">
+      <p class="road__label">The Way of Truth</p>
+      <p class="road__sub">What is the same everywhere</p>
+      <ul class="same">
+        <li><code>express 4.21.2</code>, <code>pg 8.13.1</code>, <code>stripe 17.4.0</code>, from one lockfile</li>
+        <li>The same env var keys, except one</li>
+        <li><code>NODE_ENV=production</code> in both</li>
+        <li><code>cookieSecure</code>, <code>maxAgeHours</code>, <code>poolSize</code></li>
+        <li><code>npm ci</code> and the same <code>deploy.sh</code></li>
+      </ul>
+    </article>
+    <article class="road road--opinion">
+      <p class="road__label">The Way of Opinion</p>
+      <p class="road__sub">Where staging and prod have drifted</p>
+      <div class="drift" role="table" aria-label="Drift between staging and prod">
+        <div class="drift__row drift__head" role="row"><span role="columnheader">Risk</span><span role="columnheader">What drifted</span><span role="columnheader">staging</span><span role="columnheader">prod</span></div>
+        <div class="drift__row" role="row"><span class="risk risk--high" role="cell">High</span><span role="cell"><code>STRIPE_WEBHOOK_SECRET</code></span><span role="cell">present</span><span role="cell" class="bad">missing</span></div>
+        <div class="drift__row" role="row"><span class="risk risk--high" role="cell">High</span><span role="cell">Node runtime</span><span role="cell"><code>node:20</code></span><span role="cell" class="bad"><code>node:18</code></span></div>
+        <div class="drift__row" role="row"><span class="risk risk--high" role="cell">High</span><span role="cell">Postgres</span><span role="cell"><code>16.4</code></span><span role="cell" class="bad"><code>15.8</code></span></div>
+        <div class="drift__row" role="row"><span class="risk risk--high" role="cell">High</span><span role="cell">Tests and migrations before deploy</span><span role="cell">run</span><span role="cell" class="bad">skipped</span></div>
+        <div class="drift__row" role="row"><span class="risk risk--high" role="cell">High</span><span role="cell">CORS origins</span><span role="cell">one origin</span><span role="cell" class="bad"><code>*</code></span></div>
+        <div class="drift__row" role="row"><span class="risk risk--med" role="cell">Medium</span><span role="cell">Redis image</span><span role="cell"><code>redis:7.4</code></span><span role="cell" class="bad"><code>redis:latest</code></span></div>
+        <div class="drift__row" role="row"><span class="risk risk--med" role="cell">Medium</span><span role="cell">Flag <code>newCheckout</code></span><span role="cell">on</span><span role="cell" class="bad">off</span></div>
+        <div class="drift__row" role="row"><span class="risk risk--med" role="cell">Medium</span><span role="cell">HTTP timeout and retries</span><span role="cell">10s, 3</span><span role="cell" class="bad">3s, 0</span></div>
+      </div>
+    </article>
+  </div>
+  <p class="ex__close">“What is, is one. Until production agrees, it remains mere opinion.” <a href="https://github.com/senavoh/parmenides/blob/main/examples/demo-shop-report.md">Read the full report</a></p>
+</section>
+
+<!-- CHECKS -->
+<section class="sec checks" id="checks" aria-labelledby="checks-h">
+  <h2 id="checks-h" class="h2">What it compares.</h2>
+  <ol class="checklist">
+    <li><h3>Env var keys</h3><p>Present in one environment, missing in another. A key missing in prod is the classic outage.</p></li>
+    <li><h3>Runtimes</h3><p><code>.nvmrc</code>, <code>.python-version</code>, <code>.tool-versions</code>, <code>engines</code>, Dockerfile <code>FROM</code>.</p></li>
+    <li><h3>Dependencies</h3><p>Lockfiles and pins that differ between environments, services or branches.</p></li>
+    <li><h3>Images</h3><p>Database, cache and queue versions, and anything on <code>latest</code>.</p></li>
+    <li><h3>Behavior</h3><p>Feature flags, timeouts, retries, pool sizes, CORS, cookie and TLS settings.</p></li>
+    <li><h3>Infrastructure</h3><p>Terraform, Kubernetes overlays, Helm values, Pulumi stacks.</p></li>
+    <li><h3>Pipelines</h3><p>Steps that run before one deploy and are skipped before another.</p></li>
+  </ol>
+  <p class="checks__where">It finds your environments in per-environment files (<code>.env.production</code>, <code>config/staging.yml</code>, <code>docker-compose.prod.yml</code>, <code>values-prod.yaml</code>, <code>prod.tfvars</code>) or in branches, like <code>staging</code> against <code>main</code>.</p>
+</section>
+
+<!-- SECRETS -->
+<section class="sec secrets" aria-labelledby="sec-h">
+  <div>
+    <h2 id="sec-h" class="h2">Secrets stay<br>under the floor.</h2>
+    <p class="lede">It compares keys, not values. A secret only ever shows up as <b>same</b>, <b>differs</b> or <b>missing</b>. If a real secret is committed to the repo, it flags that, without printing it.</p>
+  </div>
+  <div class="vault" aria-label="Secret values hidden by the report">
+    <div class="vault__row"><code>STRIPE_SECRET_KEY</code><span class="redact" data-redact></span><span class="tag">differs</span></div>
+    <div class="vault__row"><code>SESSION_SECRET</code><span class="redact" data-redact></span><span class="tag">differs</span></div>
+    <div class="vault__row"><code>DATABASE_URL</code><span class="redact" data-redact></span><span class="tag">host differs</span></div>
+    <div class="vault__row"><code>STRIPE_WEBHOOK_SECRET</code><span class="redact" data-redact></span><span class="tag tag--bad">missing in prod</span></div>
+  </div>
+</section>
+
+<!-- EXPECTED -->
+<section class="sec expected" aria-labelledby="exp-h">
+  <div>
+    <h2 id="exp-h" class="h2">Some differences<br>are meant to be.</h2>
+    <p class="lede">URLs, replica counts and log levels should differ. List them in a <code>.parmenides.yml</code> and they stop counting as drift. A key that's missing still counts.</p>
+  </div>
+  <pre class="yml"><code><span class="c"># .parmenides.yml</span>
+expected:
+  - LOG_LEVEL
+  - <span class="s">"*_URL"</span>
+  - replicas</code></pre>
+</section>
+
+<!-- INSTALL -->
+<section class="sec install" id="install" aria-labelledby="install-h">
+  <h2 id="install-h" class="h2">Install it.</h2>
+  <div class="itabs">
+    <div class="tabs" role="tablist" aria-label="Install method">
+      <button type="button" role="tab" id="tab-npx" aria-controls="panel-npx" aria-selected="true">npx</button>
+      <button type="button" role="tab" id="tab-plugin" aria-controls="panel-plugin" aria-selected="false" tabindex="-1">Claude Code</button>
+      <button type="button" role="tab" id="tab-curl" aria-controls="panel-curl" aria-selected="false" tabindex="-1">Script</button>
+      <button type="button" role="tab" id="tab-manual" aria-controls="panel-manual" aria-selected="false" tabindex="-1">Manual</button>
+    </div>
+    <div class="panel" role="tabpanel" id="panel-npx" aria-labelledby="tab-npx" tabindex="0">
+      <p>Installs the skill into every agent on your machine. Needs Node.js 22 or newer; on older versions use Script.</p>
+      <div class="cmd"><code><span aria-hidden="true">$ </span><span data-cmd="npx">npx skills add senavoh/parmenides</span></code><button class="copy" type="button" data-copy-from="npx" aria-label="Copy npx command">Copy</button></div>
+    </div>
+    <div class="panel" role="tabpanel" id="panel-plugin" aria-labelledby="tab-plugin" tabindex="0" hidden>
+      <p>Inside Claude Code, add the marketplace, then install the plugin.</p>
+      <div class="cmd"><code><span data-cmd="pluginAdd">/plugin marketplace add senavoh/parmenides</span></code><button class="copy" type="button" data-copy-from="pluginAdd" aria-label="Copy marketplace command">Copy</button></div>
+      <div class="cmd"><code><span data-cmd="pluginInstall">/plugin install parmenides@parmenides</span></code><button class="copy" type="button" data-copy-from="pluginInstall" aria-label="Copy plugin install command">Copy</button></div>
+    </div>
+    <div class="panel" role="tabpanel" id="panel-curl" aria-labelledby="tab-curl" tabindex="0" hidden>
+      <p>Copies the skill into every agent folder it finds. <a href="https://github.com/senavoh/parmenides/blob/main/install.sh">Read the script first.</a></p>
+      <div class="cmd"><code><span aria-hidden="true">$ </span><span data-cmd="curl">curl -fsSL https://raw.githubusercontent.com/senavoh/parmenides/main/install.sh | sh</span></code><button class="copy" type="button" data-copy-from="curl" aria-label="Copy script command">Copy</button></div>
+    </div>
+    <div class="panel" role="tabpanel" id="panel-manual" aria-labelledby="tab-manual" tabindex="0" hidden>
+      <p>Clone the repo and copy the skill into your agent's skills folder. This path is for Claude Code.</p>
+      <div class="cmd"><code><span aria-hidden="true">$ </span><span data-cmd="clone">git clone https://github.com/senavoh/parmenides</span></code><button class="copy" type="button" data-copy-from="clone" aria-label="Copy clone command">Copy</button></div>
+      <div class="cmd"><code><span aria-hidden="true">$ </span><span data-cmd="manualCopy">cp -r parmenides/skills/parmenides ~/.claude/skills/</span></code><button class="copy" type="button" data-copy-from="manualCopy" aria-label="Copy copy command">Copy</button></div>
+    </div>
+  </div>
+  <div class="ask">
+    <p class="ask__label">Then open a project and ask</p>
+    <p class="ask__line">“Is staging the same as prod?”</p>
+    <p class="ask__alt">Or “compare my environments”, or “what's different between the staging and main branches?”</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec faq" aria-labelledby="faq-h">
+  <h2 id="faq-h" class="h2">Questions.</h2>
+  <div class="faq__list">
+    <details><summary>Will it change anything?</summary><p>No. It reads files and writes nothing unless you ask it to save the report as <code>PARMENIDES.md</code>. It never runs deploys or touches a real environment.</p></details>
+    <details><summary>Does it see my secrets?</summary><p>It reads your env files to compare keys, the way your agent reads any file. It never prints a secret value: only same, differs or missing.</p></details>
+    <details><summary>Is it free?</summary><p>Yes. Open source under the MIT license, no API key. The only cost is your agent's own usage.</p></details>
+    <details><summary>Which agents does it work with?</summary><p>Claude Code, Codex, Cursor, Gemini CLI, OpenCode, and any agent that reads SKILL.md files.</p></details>
+    <details><summary>Can it compare live environments?</summary><p>Not yet. Today it compares what's in the repo: files and branches. Read-only checks of live cloud environments are on the roadmap.</p></details>
+    <details><summary>Who was Parmenides?</summary><p>A Greek philosopher from Elea, in southern Italy, born around 515 BC. His one surviving work is a poem, <i>On Nature</i>, where a goddess teaches him that what is, is one and unchanging.</p></details>
+  </div>
+</section>
+
+<!-- CLOSE -->
+<section class="close" aria-labelledby="close-h">
+  <h2 id="close-h" class="tiled tiled--small" data-lines="MAKE THEM|ONE." data-alt="1"><span class="tiled__text">Make them one.</span></h2>
+  <p class="lede">If it caught a drift before your users did, a star helps other developers find it.</p>
+  <div class="ctas">
+    <a class="btn btn--terra" data-gh href="https://github.com/senavoh/parmenides">Star it. It won't drift.</a>
+    <a class="btn btn--line" data-gh-issues href="https://github.com/senavoh/parmenides/issues">Report a drift it missed</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <span class="wordmark">PARMENIDES</span>
+  <span>Open source · MIT · parmenides.dev</span>
+  <span><a data-gh href="https://github.com/senavoh/parmenides">GitHub</a> · <a href="https://github.com/senavoh/parmenides/blob/main/examples/demo-shop-report.md">Example report</a> · <a href="https://github.com/senavoh/parmenides/blob/main/install.sh">install.sh</a></span>
+</footer>
+
+<script src="main.js?v=1" defer></script>
+</body>
+</html>
