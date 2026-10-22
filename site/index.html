@@ -3,200 +3,234 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>parmenides — what is, is one</title>
-<meta name="description" content="An open-source agent skill that finds every drift between dev, staging and production, ranks it by risk, and never prints a secret.">
-<meta name="theme-color" content="#062b8a">
+<title>Parmenides — what is, is one</title>
+<meta name="description" content="An open-source agent skill that finds every drift between dev, staging and production, ranks it by risk, and never prints a secret. Claude Code, Codex, Cursor, Gemini CLI, OpenCode.">
+<meta name="theme-color" content="#1c1814">
 <link rel="canonical" href="https://parmenides.dev/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="parmenides — what is, is one">
+<meta property="og:url" content="https://parmenides.dev/">
+<meta property="og:title" content="Parmenides — what is, is one">
 <meta property="og:description" content="Find every drift between dev, staging and production, ranked by risk. Never prints a secret.">
-<meta property="og:image" content="https://parmenides.dev/mosaic-cobalt.png">
-<link rel="icon" href="mosaic-cobalt.png" type="image/png">
-<link rel="preconnect" href="https://api.fontshare.com">
-<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
-<link href="https://api.fontshare.com/v2/css?f[]=pilcrow-rounded@400,500,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2">
+<meta property="og:image" content="https://parmenides.dev/parmenides.png">
+<link rel="icon" href="parmenides.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
-<a class="skip" href="#main">skip to content</a>
+<a class="skip" href="#main">Skip to content</a>
 
-<!-- HERO: three environments, stacked like folders. prod is open. -->
 <header class="hero" id="top">
-  <nav class="top" aria-label="Primary">
-    <span></span>
-    <a class="wordmark" href="#top">parmenides</a>
-    <a class="top__link" data-gh href="https://github.com/senavoh/parmenides">github <span data-stars></span></a>
+  <nav class="nav" aria-label="Primary">
+    <a class="wordmark" href="#top">PARMENIDES</a>
+    <ul>
+      <li><a href="#report">The example</a></li>
+      <li><a href="#checks">What it checks</a></li>
+      <li><a href="#install">Install</a></li>
+      <li><a class="star" data-gh href="https://github.com/senavoh/parmenides">GitHub <span data-stars></span></a></li>
+    </ul>
   </nav>
-  <h1 class="hero__h1">what is, is one.</h1>
-  <p class="hero__sub">An agent skill that finds every drift between dev, staging and production, ranks it by risk, and never prints a secret.</p>
-
-  <div class="stack" aria-label="Your environments">
-    <div class="folder folder--dev"><span class="folder__tab">dev</span></div>
-    <div class="folder folder--staging"><span class="folder__tab">staging</span></div>
-    <div class="folder folder--prod">
-      <span class="folder__tab">prod</span>
-      <div class="folder__body">
-        <div class="cmd">
-          <code><span data-cmd="npx">npx skills add senavoh/parmenides</span></code>
-          <button class="btn" type="button" data-copy-from="npx">copy</button>
-        </div>
-        <p class="folder__note">Then ask your agent: “is staging the same as prod?”</p>
-        <div class="drift" data-ui aria-label="prod against staging, from a real run on a demo app">
-          <p class="drift__title">prod against staging <span>demo app, real run</span></p>
-          <p class="drift__row"><span class="drift__risk">high</span><span>STRIPE_WEBHOOK_SECRET</span><span>present</span><span class="drift__bad">missing</span></p>
-          <p class="drift__row"><span class="drift__risk">high</span><span>node runtime</span><span>20</span><span class="drift__bad">18</span></p>
-          <p class="drift__row"><span class="drift__risk">high</span><span>postgres</span><span>16.4</span><span class="drift__bad">15.8</span></p>
-          <p class="drift__row"><span class="drift__risk">high</span><span>migrations before deploy</span><span>run</span><span class="drift__bad">skipped</span></p>
-          <p class="drift__row"><span class="drift__risk drift__risk--med">medium</span><span>redis image</span><span>7.4</span><span class="drift__bad">latest</span></p>
-        </div>
+  <div class="hero__grid">
+    <div class="hero__copy">
+      <h1 class="tiled" data-lines="WHAT IS,|IS ONE." data-alt="1"><span class="tiled__text">What is, is one.</span></h1>
+      <p class="hero__sub">An agent skill that finds every drift between dev, staging and production, and ranks it by risk. It never prints a secret.</p>
+      <div class="cmd">
+        <code><span aria-hidden="true">$ </span><span data-cmd="npx">npx skills add senavoh/parmenides</span></code>
+        <button class="copy" type="button" data-copy-from="npx" aria-label="Copy install command">Copy</button>
       </div>
+      <p class="hero__meta">Then ask your agent: “Is staging the same as prod?”</p>
     </div>
+    <figure class="portrait">
+      <img src="parmenides.png" width="600" height="600" alt="Parmenides as a Greek floor mosaic, eyes closed, unbothered">
+      <figcaption>Parmenides of Elea, unbothered since 475 BC.</figcaption>
+    </figure>
   </div>
 </header>
 
 <main id="main">
 
-<!-- SHOWCASE: the square plate -->
-<section class="plate" id="report" aria-labelledby="plate-h">
-  <figure class="plate__pic">
-    <img src="mosaic-cobalt.png" width="1200" height="1200" alt="Parmenides as a floor mosaic in cobalt and sand, eyes closed">
-  </figure>
-  <div class="plate__copy">
-    <div class="plate__tabs" role="tablist" aria-label="The report">
-      <button type="button" role="tab" aria-selected="true" aria-controls="pane" data-pane="truth">the way of truth</button>
-      <button type="button" role="tab" aria-selected="false" aria-controls="pane" data-pane="opinion">the way of opinion</button>
-      <button type="button" role="tab" aria-selected="false" aria-controls="pane" data-pane="verdict">the verdict</button>
+<!-- the agents, on a tone band -->
+<section class="agents" aria-labelledby="agents-h">
+  <h2 id="agents-h" class="agents__h">Works in the agent you already use.</h2>
+  <ul>
+    <li>Claude Code</li><li>Codex</li><li>Cursor</li><li>Gemini CLI</li><li>OpenCode</li>
+  </ul>
+</section>
+
+<!-- what he checks: sentences with real switches -->
+<section class="checks" id="checks" aria-labelledby="checks-h">
+  <div class="checks__head">
+    <h2 id="checks-h" class="h2">What he checks.</h2>
+    <p class="lede">Flip a switch to see what he found in a real run on a demo app with drift planted on purpose.</p>
+  </div>
+  <div class="bands">
+    <div class="band" data-on>
+      <p class="band__line">Every env var key, in every environment</p>
+      <button class="switch" type="button" role="switch" aria-checked="true" aria-label="Every env var key" data-ui><span></span></button>
+      <p class="band__result">One key missing in prod: STRIPE_WEBHOOK_SECRET.</p>
     </div>
-    <div class="plate__pane" id="pane" role="tabpanel" aria-live="polite">
-      <h2 class="h2" id="plate-h" data-title>what is the same.</h2>
-      <p class="plate__text" data-text>His report opens with everything that already matches, so you know what was checked and is fine. In the demo: the same dependencies from one lockfile, the same env var keys except one, the same cookie and pool settings.</p>
+    <div class="band">
+      <p class="band__line">Runtimes, databases and images</p>
+      <button class="switch" type="button" role="switch" aria-checked="false" aria-label="Runtimes, databases and images" data-ui><span></span></button>
+      <p class="band__result">Node 20 against 18. Postgres 16.4 against 15.8. Redis on latest in prod.</p>
     </div>
-    <div class="plate__actions">
-      <a class="cell cell--ink" href="https://github.com/senavoh/parmenides/blob/main/examples/demo-shop-report.md">read a real report</a>
-      <a class="cell cell--tone" href="#install">install it</a>
+    <div class="band">
+      <p class="band__line">What runs before each deploy</p>
+      <button class="switch" type="button" role="switch" aria-checked="false" aria-label="What runs before each deploy" data-ui><span></span></button>
+      <p class="band__result">Staging runs tests and migrations. Prod skips both.</p>
+    </div>
+    <div class="band" data-on>
+      <p class="band__line">Secrets, without printing a single one</p>
+      <button class="switch" type="button" role="switch" aria-checked="true" aria-label="Secrets, without printing one" data-ui><span></span></button>
+      <p class="band__result">Four secrets compared. Zero values printed.</p>
+    </div>
+    <div class="band">
+      <p class="band__line">Only what you didn't mean to differ</p>
+      <button class="switch" type="button" role="switch" aria-checked="false" aria-label="Only unintended differences" data-ui><span></span></button>
+      <p class="band__result">Log levels, URLs and replica counts listed in .parmenides.yml, left out of the count.</p>
     </div>
   </div>
 </section>
 
-<!-- FEATURES: sentences with switches -->
-<section class="switches" aria-labelledby="sw-h">
-  <h2 id="sw-h" class="sr-only">What it does</h2>
-  <div class="band" data-on>
-    <p class="band__line">compare every env var key</p>
-    <button class="toggle" type="button" role="switch" aria-checked="true" aria-label="compare every env var key" data-ui><span></span></button>
-    <p class="band__result">1 key missing in prod: <b>STRIPE_WEBHOOK_SECRET</b></p>
+<!-- the real report: the two roads -->
+<section class="report" id="report" aria-labelledby="report-h">
+  <div class="report__head">
+    <h2 id="report-h" class="h2">The two roads.</h2>
+    <p class="lede">In his poem, a goddess shows him the Way of Truth and the Way of Opinion. His report follows them. This is the real, unedited run on the demo app. It found all eight planted drifts.</p>
   </div>
-  <div class="band">
-    <p class="band__line">check runtimes and image versions</p>
-    <button class="toggle" type="button" role="switch" aria-checked="false" aria-label="check runtimes and image versions" data-ui><span></span></button>
-    <p class="band__result">node 20 against 18, postgres 16.4 against 15.8, redis on latest</p>
+  <div class="roads">
+    <article class="road road--truth">
+      <h3 class="road__h">The Way of Truth</h3>
+      <p class="road__sub">What is already one</p>
+      <ul class="same">
+        <li>Express, pg and Stripe at the same versions, from one lockfile</li>
+        <li>The same env var keys, except one</li>
+        <li>Production mode in both</li>
+        <li>The same cookie, session and pool settings</li>
+        <li>The same install step and the same deploy script</li>
+      </ul>
+      <p class="road__close">Everything else<br>is one.</p>
+    </article>
+    <article class="road road--opinion">
+      <h3 class="road__h">The Way of Opinion</h3>
+      <p class="road__sub">Where prod has drifted from staging</p>
+      <ol class="drifts">
+        <li class="drift drift--high"><span class="drift__what">Stripe webhook secret</span><span class="drift__was">present</span><span class="drift__is">missing</span></li>
+        <li class="drift drift--high"><span class="drift__what">Node runtime</span><span class="drift__was">20</span><span class="drift__is">18</span></li>
+        <li class="drift drift--high"><span class="drift__what">Postgres</span><span class="drift__was">16.4</span><span class="drift__is">15.8</span></li>
+        <li class="drift drift--high"><span class="drift__what">Tests and migrations</span><span class="drift__was">run</span><span class="drift__is">skipped</span></li>
+        <li class="drift drift--high"><span class="drift__what">CORS origins</span><span class="drift__was">one</span><span class="drift__is">any</span></li>
+        <li class="drift drift--med"><span class="drift__what">Redis image</span><span class="drift__was">7.4</span><span class="drift__is">latest</span></li>
+        <li class="drift drift--med"><span class="drift__what">New checkout flag</span><span class="drift__was">on</span><span class="drift__is">off</span></li>
+        <li class="drift drift--med"><span class="drift__what">Timeout and retries</span><span class="drift__was">10s, 3</span><span class="drift__is">3s, 0</span></li>
+      </ol>
+      <p class="key"><span class="key__tile key__tile--high"></span>high risk <span class="key__tile key__tile--med"></span>medium risk</p>
+    </article>
   </div>
-  <div class="band" data-on>
-    <p class="band__line">never print a secret value</p>
-    <button class="toggle" type="button" role="switch" aria-checked="true" aria-label="never print a secret value" data-ui><span></span></button>
-    <p class="band__result">4 secrets compared, 0 values printed</p>
-  </div>
-  <div class="band">
-    <p class="band__line">leave out what you meant</p>
-    <button class="toggle" type="button" role="switch" aria-checked="false" aria-label="leave out what you meant" data-ui><span></span></button>
-    <p class="band__result">4 expected differences, listed in .parmenides.yml, not counted as drift</p>
-  </div>
-  <div class="band">
-    <p class="band__line">rank every drift by risk</p>
-    <button class="toggle" type="button" role="switch" aria-checked="false" aria-label="rank every drift by risk" data-ui><span></span></button>
-    <p class="band__result">5 high, 4 medium, 0 low, from a real run on the demo app</p>
+  <p class="report__close">“What is, is one. Until production agrees, it remains mere opinion.” <a href="https://github.com/senavoh/parmenides/blob/main/examples/demo-shop-report.md">Read the full report</a></p>
+</section>
+
+<!-- how it works: one drift, four panels -->
+<section class="journey" aria-labelledby="journey-h">
+  <h2 id="journey-h" class="h2 journey__h">One drift, start to finish.</h2>
+  <div class="steps">
+    <div class="step">
+      <article class="card" data-ui>
+        <p class="card__key"><code>STRIPE_WEBHOOK_SECRET</code></p>
+        <p class="card__row"><span>.env.staging</span><span>read</span></p>
+        <p class="card__row"><span>.env.production</span><span>read</span></p>
+      </article>
+      <p class="step__line">He reads every environment.</p>
+    </div>
+    <div class="step">
+      <article class="card" data-ui>
+        <p class="card__key"><code>STRIPE_WEBHOOK_SECRET</code></p>
+        <p class="card__row"><span>staging</span><span>present</span></p>
+        <p class="card__row"><span>prod</span><span class="card__bad">missing</span></p>
+      </article>
+      <p class="step__line">He compares them, key by key.</p>
+    </div>
+    <div class="step">
+      <article class="card" data-ui>
+        <p class="card__key"><code>STRIPE_WEBHOOK_SECRET</code> <span class="card__risk">High</span></p>
+        <p class="card__row"><span>staging</span><span>present</span></p>
+        <p class="card__row"><span>prod</span><span class="card__bad">missing</span></p>
+        <p class="card__fix">Add it to the prod secret store.</p>
+      </article>
+      <p class="step__line">He ranks it and names the fix.</p>
+    </div>
+    <div class="step">
+      <article class="card" data-ui>
+        <p class="card__key"><code>STRIPE_WEBHOOK_SECRET</code> <span class="card__ok">One</span></p>
+        <p class="card__row"><span>staging</span><span>present</span></p>
+        <p class="card__row"><span>prod</span><span>present</span></p>
+        <p class="card__fix">No drift on this key.</p>
+      </article>
+      <p class="step__line">You make them one.</p>
+    </div>
   </div>
 </section>
 
-<!-- HOW: one drift, four fields -->
-<section class="fields" id="how" aria-labelledby="how-h">
-  <div class="field">
-    <h2 id="how-h" class="fields__h">how it works</h2>
-    <article class="card" data-ui>
-      <p class="card__key">STRIPE_WEBHOOK_SECRET</p>
-      <p class="card__row"><span>.env.staging</span><span>read</span></p>
-      <p class="card__row"><span>.env.production</span><span>read</span></p>
-    </article>
-    <p class="fields__clause">First, it reads every environment.</p>
+<!-- secrets, under the floor -->
+<section class="secrets" aria-labelledby="sec-h">
+  <div>
+    <h2 id="sec-h" class="h2">Secrets stay under the floor.</h2>
+    <p class="lede">He compares keys, not values. A secret only ever shows up as same, differs or missing. If a real secret is committed to the repo, he flags it without printing it.</p>
   </div>
-  <div class="field">
-    <article class="card" data-ui>
-      <p class="card__key">STRIPE_WEBHOOK_SECRET</p>
-      <p class="card__row"><span>staging</span><span>present</span></p>
-      <p class="card__row"><span>prod</span><span class="card__bad">missing</span></p>
-    </article>
-    <p class="fields__clause">Then it compares them, key by key.</p>
-  </div>
-  <div class="field">
-    <article class="card" data-ui>
-      <p class="card__key">STRIPE_WEBHOOK_SECRET <span class="card__risk">high</span></p>
-      <p class="card__row"><span>staging</span><span>present</span></p>
-      <p class="card__row"><span>prod</span><span class="card__bad">missing</span></p>
-      <p class="card__fix">Add it to the prod secret store.</p>
-    </article>
-    <p class="fields__clause">Then it ranks the drift and names the fix.</p>
-  </div>
-  <div class="field">
-    <article class="card" data-ui>
-      <p class="card__key">STRIPE_WEBHOOK_SECRET <span class="card__ok">one</span></p>
-      <p class="card__row"><span>staging</span><span>present</span></p>
-      <p class="card__row"><span>prod</span><span>present</span></p>
-      <p class="card__fix">No drift on this key.</p>
-    </article>
-    <p class="fields__clause">Then you make them one.</p>
+  <div class="vault" aria-label="Secret values, hidden">
+    <div class="vault__row"><code class="vault__key">STRIPE_SECRET_KEY</code><span class="redact" data-redact></span><span class="vault__tag">differs</span></div>
+    <div class="vault__row"><code class="vault__key">SESSION_SECRET</code><span class="redact" data-redact></span><span class="vault__tag">differs</span></div>
+    <div class="vault__row"><code class="vault__key">DATABASE_URL</code><span class="redact" data-redact></span><span class="vault__tag">host differs</span></div>
+    <div class="vault__row"><code class="vault__key">STRIPE_WEBHOOK_SECRET</code><span class="redact" data-redact></span><span class="vault__tag vault__tag--bad">missing in prod</span></div>
   </div>
 </section>
 
-<!-- FAQ -->
+<!-- questions -->
 <section class="faq" aria-labelledby="faq-h">
-  <h2 id="faq-h" class="h2 faq__h">questions.</h2>
+  <h2 id="faq-h" class="h2 faq__h">Questions.</h2>
   <div class="faq__list">
     <details name="faq" open><summary>Will it change anything?</summary><p>No. It reads files and writes nothing unless you ask it to save the report as PARMENIDES.md. It never runs a deploy or touches a real environment.</p></details>
-    <details name="faq"><summary>Does it see my secrets?</summary><p>It reads your env files to compare keys, the way your agent reads any file. It never prints a value: only same, differs or missing.</p></details>
-    <details name="faq"><summary>Where does it find my environments?</summary><p>In per-environment files like .env.production, config/staging.yml, docker-compose.prod.yml, values-prod.yaml or prod.tfvars, or in branches, like staging against main.</p></details>
+    <details name="faq"><summary>Where does it find my environments?</summary><p>In per-environment files like .env.production, config/staging.yml, docker-compose.prod.yml, values-prod.yaml or prod.tfvars. Or in branches, like staging against main.</p></details>
+    <details name="faq"><summary>What about differences I want?</summary><p>List them in a .parmenides.yml and they stop counting as drift. A key that's missing still counts.</p></details>
     <details name="faq"><summary>Which agents does it work in?</summary><p>Claude Code, Codex, Cursor, Gemini CLI, OpenCode, and any agent that reads SKILL.md files. No API key, no account.</p></details>
-    <details name="faq"><summary>What about differences I want?</summary><p>List them in a .parmenides.yml (log levels, URLs, replica counts) and they stop counting as drift. A key that's missing still counts.</p></details>
     <details name="faq"><summary>Is it free?</summary><p>Yes. Open source under the MIT license. The only cost is your agent's own usage.</p></details>
     <details name="faq"><summary>Who was Parmenides?</summary><p>A Greek philosopher from Elea, born around 515 BC. His one surviving work is a poem, On Nature, where a goddess teaches him that what is, is one and unchanging.</p></details>
   </div>
 </section>
 
-<!-- CTA: the first step, already open -->
-<section class="open" id="install" aria-labelledby="open-h">
-  <div class="open__copy">
-    <h2 id="open-h" class="open__h">make them one.</h2>
-    <p>Install the skill, open a project, and ask the question on the right. Nothing to host and no API key.</p>
+<!-- close: the first step, already open -->
+<section class="close" id="install" aria-labelledby="close-h">
+  <div class="close__copy">
+    <h2 id="close-h" class="tiled tiled--close" data-lines="MAKE THEM|ONE." data-alt="1"><span class="tiled__text">Make them one.</span></h2>
+    <p class="lede">Install the skill once, open a project, and ask. Nothing to host, no API key.</p>
+    <div class="ctas">
+      <a class="btn btn--terra" data-gh href="https://github.com/senavoh/parmenides">Star it. It won't drift.</a>
+      <a class="btn btn--line" href="https://github.com/senavoh/parmenides/blob/main/examples/demo-shop-report.md">Read a real report</a>
+    </div>
   </div>
   <form class="ask" data-ui aria-label="Ask your agent">
     <p class="ask__title">Ask your agent</p>
     <label class="ask__label" for="q">Your question</label>
     <input id="q" class="ask__input" type="text" value="Is staging the same as prod?" autocomplete="off">
     <div class="ask__seg" role="radiogroup" aria-label="Compare">
-      <button type="button" role="radio" aria-checked="true" data-q="Is staging the same as prod?">files</button>
-      <button type="button" role="radio" aria-checked="false" data-q="What's different between the staging and main branches?">branches</button>
+      <button type="button" role="radio" aria-checked="true" data-q="Is staging the same as prod?">Files</button>
+      <button type="button" role="radio" aria-checked="false" data-q="What's different between the staging and main branches?">Branches</button>
     </div>
-    <p class="ask__hint">First, install it once:</p>
+    <p class="ask__label">Install it once</p>
     <code class="ask__cmd" data-cmd="npx">npx skills add senavoh/parmenides</code>
-    <button class="ask__go" type="submit">copy install command</button>
+    <button class="ask__go" type="submit">Copy install command</button>
   </form>
 </section>
 
 </main>
 
-<!-- FOOTER: the mark, built large -->
 <footer class="foot">
-  <div class="foot__mark tiled" data-lines="PARMENIDES" aria-hidden="true"></div>
-  <div class="foot__links">
-    <ul><li><a data-gh href="https://github.com/senavoh/parmenides">github</a></li><li><a href="https://github.com/senavoh/parmenides/blob/main/examples/demo-shop-report.md">example report</a></li></ul>
-    <ul><li><a href="https://github.com/senavoh/parmenides/blob/main/install.sh">install.sh</a></li><li><a href="https://github.com/senavoh/parmenides/blob/main/skills/parmenides/SKILL.md">the skill</a></li></ul>
-    <ul><li><a href="https://github.com/senavoh/parmenides/blob/main/LICENSE">MIT license</a></li><li><a data-gh-issues href="https://github.com/senavoh/parmenides/issues">report a drift it missed</a></li></ul>
-  </div>
-  <div class="foot__last">
-    <span>parmenides.dev · open source</span>
-    <a class="btn btn--small" data-gh href="https://github.com/senavoh/parmenides">star it. it won't drift.</a>
-  </div>
+  <span class="wordmark">PARMENIDES</span>
+  <span>Open source · MIT · parmenides.dev</span>
+  <span class="foot__links"><a data-gh href="https://github.com/senavoh/parmenides">GitHub</a><a href="https://github.com/senavoh/parmenides/blob/main/install.sh">install.sh</a><a data-gh-issues href="https://github.com/senavoh/parmenides/issues">Report a drift it missed</a></span>
 </footer>
 
-<script src="main.js?v=2" defer></script>
+<script src="main.js?v=3" defer></script>
 </body>
 </html>
