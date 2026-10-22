@@ -30,13 +30,18 @@ const canAnimate = () => !reduce && typeof anime === "function";
 function layHeading(el, animate) {
   const lines = el.dataset.lines.split("|");
   const m = document.createElement("canvas").getContext("2d"); m.font = '220px "Marcellus", serif';
-  const W = Math.max(1300, Math.ceil(Math.max(...lines.map((t) => m.measureText(t).width)) + 60));
+  const track = Number(el.dataset.track || 0);
+  const width = (t) => m.measureText(t).width + track * (t.length - 1);
+  const W = Math.max(1300, Math.ceil(Math.max(...lines.map(width)) + 60));
   const lineH = 280, H = lineH * lines.length + 20, T = 16;
   const off = document.createElement("canvas"); off.width = W; off.height = H;
   const o = off.getContext("2d");
   o.fillStyle = o.strokeStyle = "#000"; o.lineWidth = 22; o.lineJoin = "round";
   o.font = '220px "Marcellus", serif'; o.textBaseline = "top";
-  lines.forEach((t, n) => { o.strokeText(t, 12, 24 + n * lineH); o.fillText(t, 12, 24 + n * lineH); });
+  lines.forEach((t, n) => {
+    let x = 12;
+    for (const ch of track ? [...t] : [t]) { o.strokeText(ch, x, 24 + n * lineH); o.fillText(ch, x, 24 + n * lineH); x += o.measureText(ch).width + track; }
+  });
   const d = o.getImageData(0, 0, W, H).data, r = rng(7 + lines.join("").length);
   const tiles = [];
   let maxX = 0;
