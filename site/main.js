@@ -338,12 +338,7 @@ const q = document.getElementById("q");
 seg.forEach((b) => b.addEventListener("click", () => {
   seg.forEach((x) => x.setAttribute("aria-checked", String(x === b)));
   q.value = b.dataset.q;
-  fitQ();
 }));
-// the question box grows with the question, so nothing is cut off
-function fitQ() { if (!q) return; q.style.height = "auto"; q.style.height = q.scrollHeight + "px"; }
-q?.addEventListener("input", fitQ);
-fitQ();
 const ask = document.querySelector(".ask");
 ask?.addEventListener("submit", async (e) => {
   e.preventDefault();

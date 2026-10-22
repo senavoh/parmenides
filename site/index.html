@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -158,10 +158,10 @@
   <form class="ask" data-ui aria-label="Ask your agent">
     <p class="ask__title">Ask your agent</p>
     <label class="ask__label" for="q">Your question</label>
-    <textarea id="q" class="ask__input" rows="2" autocomplete="off">Is staging the same as prod?</textarea>
+    <input id="q" class="ask__input" type="text" value="Is staging the same as prod?" autocomplete="off">
     <div class="ask__seg" role="radiogroup" aria-label="Compare">
       <button type="button" role="radio" aria-checked="true" data-q="Is staging the same as prod?">Files</button>
-      <button type="button" role="radio" aria-checked="false" data-q="What's different between the staging and main branches?">Branches</button>
+      <button type="button" role="radio" aria-checked="false" data-q="Is staging the same as main?">Branches</button>
     </div>
     <p class="ask__label">Install it once</p>
     <code class="ask__cmd" data-cmd="npx">npx skills add senavoh/parmenides</code>
@@ -180,6 +180,6 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js" defer></script>
-<script src="main.js?v=8" defer></script>
+<script src="main.js?v=9" defer></script>
 </body>
 </html>
