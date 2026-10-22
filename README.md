@@ -33,20 +33,20 @@ Parmenides, the Greek philosopher, held that what truly is, is one and unchangin
 
 ## Example
 
-A blind run on [demo-shop](examples/demo-shop/), a fixture with eight drifts planted on purpose. It found all eight:
+A blind run on [demo-shop](examples/demo-shop/), a fixture with eight drifts planted on purpose. It found all eight (the HTTP timeout and retries get a row each, so the table has nine), plus two problems shared by every environment:
 
-> **Verdict:** No, staging is not the same as prod. There are 5 High, 3 Medium and 1 Low drifts. The one that matters most is that production is missing `STRIPE_WEBHOOK_SECRET`, so Stripe webhook verification in prod will fail.
+> **Verdict:** No, staging is not the same as prod. There are 5 High, 4 Medium and 0 Low drifts. The most urgent: `STRIPE_WEBHOOK_SECRET` is missing in production, so Stripe webhooks cannot be verified there.
 >
 > | Risk | What drifted | Where | staging | prod |
 > |---|---|---|---|---|
-> | High | `STRIPE_WEBHOOK_SECRET` missing in prod | `.env.production` | present | missing |
+> | High | `STRIPE_WEBHOOK_SECRET` env key | `.env.production` | present | missing |
 > | High | Node runtime major version | `Dockerfile.production:1` | `node:20-alpine` | `node:18-alpine` |
 > | High | Postgres major version | `docker-compose.production.yml:7` | `postgres:16.4` | `postgres:15.8` |
-> | High | Prod deploy skips tests and migrations | `deploy-production.yml` | run | skipped |
+> | High | Migrations and tests skipped before prod deploy | `deploy-production.yml` | run | neither runs |
 > | High | CORS weaker in prod | `config/production.json:4` | one origin | `*` |
-> | Medium | Redis on `latest` in prod | `docker-compose.production.yml:9` | `redis:7.4` | `redis:latest` |
+> | Medium | Redis image tag | `docker-compose.production.yml:9` | `redis:7.4` | `redis:latest` |
 
-[Read the full report](examples/demo-shop-report.md), including what matched, the expected differences, and the fixes.
+[Read the full, unedited report](examples/demo-shop-report.md), including what matched, the expected differences, what's wrong everywhere, and the fixes.
 
 ## What it checks
 
@@ -103,7 +103,7 @@ curl -fsSL https://raw.githubusercontent.com/senavoh/parmenides/main/install.sh 
 - [x] Drift skill for any agent
 - [ ] GitHub Action that fails a PR when environments drift
 - [ ] Drift between live environments (read-only cloud APIs), not just the repo
-- [ ] Site at [parmenides.dev](https://parmenides.dev)
+- [ ] Site at parmenides.dev
 
 ## License
 

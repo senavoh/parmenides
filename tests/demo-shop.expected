@@ -1,0 +1,10 @@
+# One line per drift planted in examples/demo-shop.
+# Each pattern (extended regex) must appear in examples/demo-shop-report.md.
+STRIPE_WEBHOOK_SECRET
+node:18
+postgres:15
+npm run migrate
+\["\*"\]|`\*`
+redis:latest
+newCheckout
+timeoutMs
