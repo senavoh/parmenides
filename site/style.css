@@ -179,12 +179,12 @@ code { font-family: var(--mono); font-size: .82em; color: var(--stone-2); }
 .ask { width: 100%; max-width: 440px; min-width: 0; justify-self: end; background: var(--stone); color: var(--ground); padding: 26px; display: grid; gap: 10px; font: 16px/1.4 var(--body); box-shadow: 14px 14px 0 var(--terra); } /* taste-skill-ignore: open dialog in a data-ui fragment */
 .ask__title { margin: 0 0 4px; font: 24px/1.1 var(--display); }
 .ask__label { margin: 6px 0 0; font-size: 14px; font-style: italic; color: #5b4a37; }
-.ask__input { font: 17px var(--body); padding: 11px 12px; border: 0; background: #fbf6ec; color: var(--ground); }
+.ask__input { font: 17px/1.4 var(--body); padding: 11px 12px; resize: none; overflow: hidden; field-sizing: content; min-height: calc(2lh + 22px); border: 0; background: #fbf6ec; color: var(--ground); }
 .ask__input:focus { outline: 2px solid var(--terra); }
 .ask__seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--stone-2); padding: 3px; }
 .ask__seg button { font: 16px var(--display); border: 0; background: none; padding: 8px 0; cursor: pointer; color: #5b4a37; }
 .ask__seg button[aria-checked="true"] { background: var(--ground); color: var(--stone); }
-.ask__cmd { scrollbar-width: none; font: 14px var(--mono); color: var(--ground); background: var(--stone-2); padding: 10px 12px; overflow-x: auto; white-space: nowrap; } /* taste-skill-ignore: literal command */
+.ask__cmd { scrollbar-width: none; font: 14px var(--mono); color: var(--ground); background: var(--stone-2); padding: 10px 12px; white-space: normal; overflow-wrap: anywhere; } /* taste-skill-ignore: literal command */
 .ask__go { margin-top: 6px; min-height: 48px; border: 0; background: var(--terra); color: var(--stone); font: 17px var(--display); letter-spacing: .04em; cursor: pointer; transition: background-color .15s; }
 .ask__go:hover, .ask__go.is-done { background: var(--terra-2); }
 
