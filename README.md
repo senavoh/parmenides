@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/parmenides-600.png" alt="Parmenides as a Greek floor mosaic, eyes closed, unbothered" width="260">
+</p>
+
 <h1 align="center">Parmenides</h1>
 
 <p align="center"><b>What is, is one.</b><br>
