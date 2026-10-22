@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -25,8 +25,8 @@
   <nav class="nav" aria-label="Primary">
     <a class="wordmark" href="#top">PARMENIDES</a>
     <ul>
-      <li><a href="#report">The example</a></li>
-      <li><a href="#checks">What it checks</a></li>
+      <li><a href="#report">The drift</a></li>
+      <li><a href="#secrets">Secrets</a></li>
       <li><a href="#install">Install</a></li>
       <li><a class="star" data-gh href="https://github.com/senavoh/parmenides">GitHub <span data-stars></span></a></li>
     </ul>
@@ -58,77 +58,34 @@
   </ul>
 </section>
 
-<!-- what he checks: sentences with real switches -->
-<section class="checks" id="checks" aria-labelledby="checks-h">
-  <div class="checks__head">
-    <h2 id="checks-h" class="h2">What he checks.</h2>
-    <p class="lede">Flip a switch to see what he found in a real run on a demo app with drift planted on purpose.</p>
+<!-- a drift is a tile out of place: the same floor, twice -->
+<section class="floors" id="report" aria-labelledby="floors-h">
+  <div class="floors__head">
+    <h2 id="floors-h" class="h2">A drift is a tile out of place.</h2>
+    <p class="floors__count" aria-live="polite"><span data-count>8 tiles out of place in prod.</span> <b data-count-sub>5 high risk, 3 medium.</b></p>
   </div>
-  <div class="bands">
-    <div class="band" data-on>
-      <p class="band__line">Every env var key, in every environment</p>
-      <button class="switch" type="button" role="switch" aria-checked="true" aria-label="Every env var key" data-ui><span></span></button>
-      <p class="band__result">One key missing in prod: STRIPE_WEBHOOK_SECRET.</p>
+  <div class="floors__pair">
+    <figure class="floor"><canvas data-floor="staging" width="1440" height="960" aria-hidden="true"></canvas><figcaption>Staging <span>as it should be</span></figcaption></figure>
+    <figure class="floor floor--prod"><canvas data-floor="prod" width="1440" height="960" aria-hidden="true"></canvas><figcaption>Prod <span>tap a tile out of place</span></figcaption></figure>
+  </div>
+  <div class="detail" aria-live="polite">
+    <span class="detail__tile" data-d="tile"></span>
+    <div class="detail__body">
+      <p class="detail__what"><span data-d="name">Stripe webhook secret</span> <span class="detail__risk" data-d="risk">High</span></p>
+      <p class="detail__vals"><span>staging <code data-d="s">present</code></span><span>prod <code data-d="p">missing</code></span></p>
+      <p class="detail__fix" data-d="fix">Add it to the prod secret store, set to prod's own webhook signing secret.</p>
     </div>
-    <div class="band">
-      <p class="band__line">Runtimes, databases and images</p>
-      <button class="switch" type="button" role="switch" aria-checked="false" aria-label="Runtimes, databases and images" data-ui><span></span></button>
-      <p class="band__result">Node 20 against 18. Postgres 16.4 against 15.8. Redis on latest in prod.</p>
-    </div>
-    <div class="band">
-      <p class="band__line">What runs before each deploy</p>
-      <button class="switch" type="button" role="switch" aria-checked="false" aria-label="What runs before each deploy" data-ui><span></span></button>
-      <p class="band__result">Staging runs tests and migrations. Prod skips both.</p>
-    </div>
-    <div class="band" data-on>
-      <p class="band__line">Secrets, without printing a single one</p>
-      <button class="switch" type="button" role="switch" aria-checked="true" aria-label="Secrets, without printing one" data-ui><span></span></button>
-      <p class="band__result">Four secrets compared. Zero values printed.</p>
-    </div>
-    <div class="band">
-      <p class="band__line">Only what you didn't mean to differ</p>
-      <button class="switch" type="button" role="switch" aria-checked="false" aria-label="Only unintended differences" data-ui><span></span></button>
-      <p class="band__result">Log levels, URLs and replica counts listed in .parmenides.yml, left out of the count.</p>
+    <div class="detail__nav" data-ui>
+      <button type="button" data-step="-1" aria-label="Previous drift">‹</button>
+      <span data-d="n">1 of 8</span>
+      <button type="button" data-step="1" aria-label="Next drift">›</button>
     </div>
   </div>
-</section>
-
-<!-- the real report: the two roads -->
-<section class="report" id="report" aria-labelledby="report-h">
-  <div class="report__head">
-    <h2 id="report-h" class="h2">The two roads.</h2>
-    <p class="lede">In his poem, a goddess shows him the Way of Truth and the Way of Opinion. His report follows them. This is the real, unedited run on the demo app. It found all eight planted drifts.</p>
+  <ol class="picks" aria-label="The eight drifts"></ol>
+  <div class="floors__foot">
+    <button class="btn btn--terra" type="button" data-mend aria-pressed="false">Make them one</button>
+    <p class="floors__note">Already one: express, pg and stripe from one lockfile, production mode, the cookie and pool settings, the deploy script. Left out on purpose: the log level, the URL hosts and the replica count, listed in <code>.parmenides.yml</code>. This is a real, unedited run on a demo app with eight drifts planted. It found all eight. <a href="https://github.com/senavoh/parmenides/blob/main/examples/demo-shop-report.md">Read the full report</a></p>
   </div>
-  <div class="roads">
-    <article class="road road--truth">
-      <h3 class="road__h">The Way of Truth</h3>
-      <p class="road__sub">What is already one</p>
-      <ul class="same">
-        <li>Express, pg and Stripe at the same versions, from one lockfile</li>
-        <li>The same env var keys, except one</li>
-        <li>Production mode in both</li>
-        <li>The same cookie, session and pool settings</li>
-        <li>The same install step and the same deploy script</li>
-      </ul>
-      <p class="road__close">Everything else<br>is one.</p>
-    </article>
-    <article class="road road--opinion">
-      <h3 class="road__h">The Way of Opinion</h3>
-      <p class="road__sub">Where prod has drifted from staging</p>
-      <ol class="drifts">
-        <li class="drift drift--high"><span class="drift__what">Stripe webhook secret</span><span class="drift__was">present</span><span class="drift__is">missing</span></li>
-        <li class="drift drift--high"><span class="drift__what">Node runtime</span><span class="drift__was">20</span><span class="drift__is">18</span></li>
-        <li class="drift drift--high"><span class="drift__what">Postgres</span><span class="drift__was">16.4</span><span class="drift__is">15.8</span></li>
-        <li class="drift drift--high"><span class="drift__what">Tests and migrations</span><span class="drift__was">run</span><span class="drift__is">skipped</span></li>
-        <li class="drift drift--high"><span class="drift__what">CORS origins</span><span class="drift__was">one</span><span class="drift__is">any</span></li>
-        <li class="drift drift--med"><span class="drift__what">Redis image</span><span class="drift__was">7.4</span><span class="drift__is">latest</span></li>
-        <li class="drift drift--med"><span class="drift__what">New checkout flag</span><span class="drift__was">on</span><span class="drift__is">off</span></li>
-        <li class="drift drift--med"><span class="drift__what">Timeout and retries</span><span class="drift__was">10s, 3</span><span class="drift__is">3s, 0</span></li>
-      </ol>
-      <p class="key"><span class="key__tile key__tile--high"></span>high risk <span class="key__tile key__tile--med"></span>medium risk</p>
-    </article>
-  </div>
-  <p class="report__close">“What is, is one. Until production agrees, it remains mere opinion.” <a href="https://github.com/senavoh/parmenides/blob/main/examples/demo-shop-report.md">Read the full report</a></p>
 </section>
 
 <!-- drift ticker: staging, then prod, line after line -->
@@ -139,49 +96,8 @@
   </div>
 </section>
 
-<!-- how it works: one drift, four panels -->
-<section class="journey" aria-labelledby="journey-h">
-  <h2 id="journey-h" class="h2 journey__h">One drift, start to finish.</h2>
-  <div class="steps">
-    <div class="step">
-      <article class="card" data-ui>
-        <p class="card__key"><code>STRIPE_WEBHOOK_SECRET</code></p>
-        <p class="card__row"><span>.env.staging</span><span>read</span></p>
-        <p class="card__row"><span>.env.production</span><span>read</span></p>
-      </article>
-      <p class="step__line">He reads every environment.</p>
-    </div>
-    <div class="step">
-      <article class="card" data-ui>
-        <p class="card__key"><code>STRIPE_WEBHOOK_SECRET</code></p>
-        <p class="card__row"><span>staging</span><span>present</span></p>
-        <p class="card__row"><span>prod</span><span class="card__bad">missing</span></p>
-      </article>
-      <p class="step__line">He compares them, key by key.</p>
-    </div>
-    <div class="step">
-      <article class="card" data-ui>
-        <p class="card__key"><code>STRIPE_WEBHOOK_SECRET</code> <span class="card__risk">High</span></p>
-        <p class="card__row"><span>staging</span><span>present</span></p>
-        <p class="card__row"><span>prod</span><span class="card__bad">missing</span></p>
-        <p class="card__fix">Add it to the prod secret store.</p>
-      </article>
-      <p class="step__line">He ranks it and names the fix.</p>
-    </div>
-    <div class="step">
-      <article class="card" data-ui>
-        <p class="card__key"><code>STRIPE_WEBHOOK_SECRET</code> <span class="card__ok">One</span></p>
-        <p class="card__row"><span>staging</span><span>present</span></p>
-        <p class="card__row"><span>prod</span><span>present</span></p>
-        <p class="card__fix">No drift on this key.</p>
-      </article>
-      <p class="step__line">You make them one.</p>
-    </div>
-  </div>
-</section>
-
 <!-- secrets, under the floor -->
-<section class="secrets" aria-labelledby="sec-h">
+<section class="secrets" id="secrets" aria-labelledby="sec-h">
   <div>
     <h2 id="sec-h" class="h2">Secrets stay under the floor.</h2>
     <p class="lede">He compares keys, not values. A secret only ever shows up as same, differs or missing. If a real secret is committed to the repo, he flags it without printing it.</p>
@@ -191,6 +107,28 @@
     <div class="vault__row"><code class="vault__key">SESSION_SECRET</code><span class="redact" data-redact></span><span class="vault__tag">differs</span></div>
     <div class="vault__row"><code class="vault__key">DATABASE_URL</code><span class="redact" data-redact></span><span class="vault__tag">host differs</span></div>
     <div class="vault__row"><code class="vault__key">STRIPE_WEBHOOK_SECRET</code><span class="redact" data-redact></span><span class="vault__tag vault__tag--bad">missing in prod</span></div>
+  </div>
+</section>
+
+<!-- wrong everywhere: cracks through both floors -->
+<section class="cracks" aria-labelledby="cracks-h">
+  <div class="cracks__head">
+    <h2 id="cracks-h" class="h2">Some cracks run through every floor.</h2>
+    <p class="lede">Staging and prod can agree and both be wrong. He lists those apart from the drift, under Wrong everywhere.</p>
+  </div>
+  <div class="cracks__list">
+    <article class="crack">
+      <canvas data-crack="1" width="960" height="200" aria-hidden="true"></canvas>
+      <h3 class="crack__h">The lockfile is ignored</h3>
+      <p>Both Dockerfiles copy only package.json and run npm install, so every build can resolve different dependencies. Nobody planted this one. It was a real mistake in the demo.</p>
+      <p class="crack__fix">Copy the lockfile and run <code>npm ci --omit=dev</code>.</p>
+    </article>
+    <article class="crack">
+      <canvas data-crack="2" width="960" height="200" aria-hidden="true"></canvas>
+      <h3 class="crack__h">The env files are committed</h3>
+      <p>All three are in the repo. Every secret in them is a placeholder, so nothing leaked, and he says so without printing one. It's still a habit worth breaking.</p>
+      <p class="crack__fix">Move them to <code>.env.*.example</code> and ignore the real files.</p>
+    </article>
   </div>
 </section>
 
@@ -242,6 +180,6 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js" defer></script>
-<script src="main.js?v=4" defer></script>
+<script src="main.js?v=5" defer></script>
 </body>
 </html>

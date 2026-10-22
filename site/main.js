@@ -158,15 +158,174 @@ document.querySelectorAll(".copy").forEach((btn) => {
   btn.addEventListener("click", async () => flash(btn, await copyText(SITE.cmd[btn.dataset.copyFrom]), "Copy"));
 });
 
-/* ---------- switches ---------- */
-document.querySelectorAll(".band").forEach((band) => {
-  const sw = band.querySelector(".switch");
-  sw.addEventListener("click", () => {
-    const on = sw.getAttribute("aria-checked") !== "true";
-    band.toggleAttribute("data-on", on);
-    sw.setAttribute("aria-checked", String(on));
+/* ---------- the floors: staging and prod, the same mosaic twice ---------- */
+const DRIFTS = [
+  { name: "Stripe webhook secret", risk: "high", s: "present", pr: "missing", at: [4, 3], fix: "Add <code>STRIPE_WEBHOOK_SECRET</code> to the prod secret store, set to prod's own signing secret." },
+  { name: "Node runtime", risk: "high", s: "node:20-alpine", pr: "node:18-alpine", at: [13, 3], fix: "Change <code>Dockerfile.production:1</code> to <code>FROM node:20-alpine</code>, or use one Dockerfile for both." },
+  { name: "Postgres", risk: "high", s: "16.4", pr: "15.8", at: [9, 5], fix: "Pick one major version and pin it in both compose files." },
+  { name: "Tests and migrations", risk: "high", s: "run", pr: "skipped", at: [3, 8], fix: "Run <code>npm test</code> and <code>npm run migrate</code> before the deploy step in <code>deploy-production.yml</code>." },
+  { name: "CORS origins", risk: "high", s: "one origin", pr: '["*"]', at: [11, 8], fix: "Set <code>cors.origins</code> in <code>config/production.json</code> to the shop's own origin." },
+  { name: "Redis image", risk: "med", s: "redis:7.4", pr: "redis:latest", at: [14, 6], fix: "Pin prod to <code>redis:7.4</code>." },
+  { name: "New checkout flag", risk: "med", s: "true", pr: "false", at: [6, 6], fix: "Turn it on or off in both, or list it in <code>.parmenides.yml</code> if it's meant to differ." },
+  { name: "Timeout and retries", risk: "med", s: "10s, 3 retries", pr: "3s, 0 retries", at: [8, 2], fix: "Use one timeout and one retry count in both, so staging tests what prod does." },
+];
+const FC = 18, FR = 12;
+const DARK = ["#3a2a22", "#47342a", "#2f231c"], GOLD = ["#d6a13c", "#c9922f", "#dcae52"], SAND = ["#d9ccb2", "#cfc0a3", "#d4c6aa"];
+const RISK = { high: "#cf5b40", med: "#d6a13c" };
+function floorPal(i, j) {
+  const e = Math.min(i, j, FC - 1 - i, FR - 1 - j);
+  if (e === 0) return DARK;
+  if (e === 1) return (i + j) % 2 ? SAND : DARK;
+  if (e === 2) return DARK;
+  const d = Math.abs(i - 8.5) / 3.4 + Math.abs(j - 5.5) / 2.2;
+  if (d <= 0.3) return SAND;
+  if (d <= 1 && d > 0.7) return DARK;
+  return STONE;
+}
+const mix = (a, b, t) => {
+  const p = (h) => [1, 3, 5].map((k) => parseInt(h.slice(k, k + 2), 16));
+  const x = p(a), y = p(b);
+  return "rgb(" + x.map((v, k) => Math.round(v + (y[k] - v) * t)).join(",") + ")";
+};
+function initFloors(sec) {
+  const cs = [...sec.querySelectorAll("canvas[data-floor]")];
+  if (!cs.length) return;
+  const W = cs[0].width, T = W / FC;
+  const r = rng(11), cells = [];
+  for (let j = 0; j < FR; j++) for (let i = 0; i < FC; i++) {
+    const pal = floorPal(i, j);
+    cells.push({ i, j, c: pal[Math.floor(r() * pal.length)], rot: (r() - 0.5) * 0.1, s: T - 7 + (r() - 0.5) * 2 });
+  }
+  const byAt = new Map(DRIFTS.map((d, k) => [d.at + "", k]));
+  DRIFTS.forEach((d, k) => { d.p = 0; d.dx = k % 2 ? 0.3 : -0.26; d.dy = -0.2 - (k % 3) * 0.06; d.dr = k % 2 ? 0.42 : -0.36; });
+  let sel = 0;
+  const scan = { x: -1 };
+  const draw = () => cs.forEach((cv) => {
+    const prod = cv.dataset.floor === "prod", ctx = cv.getContext("2d");
+    ctx.fillStyle = "#2b241e"; ctx.fillRect(0, 0, cv.width, cv.height);
+    const lifted = [];
+    for (const t of cells) {
+      const k = byAt.get([t.i, t.j] + "");
+      if (prod && k !== undefined && DRIFTS[k].p > 0.001) { lifted.push([t, k]); continue; }
+      ctx.save(); ctx.translate(t.i * T + T / 2, t.j * T + T / 2); ctx.rotate(t.rot);
+      ctx.fillStyle = t.c; ctx.fillRect(-t.s / 2, -t.s / 2, t.s, t.s);
+      if (!prod && k === sel) { ctx.strokeStyle = "#d6a13c"; ctx.lineWidth = 6; ctx.strokeRect(-t.s / 2 + 3, -t.s / 2 + 3, t.s - 6, t.s - 6); }
+      ctx.restore();
+    }
+    for (const [t, k] of lifted) {
+      const d = DRIFTS[k], p = d.p;
+      ctx.fillStyle = "#1c1814"; ctx.globalAlpha = Math.min(1, p * 1.4);
+      ctx.fillRect(t.i * T + 3, t.j * T + 3, T - 6, T - 6); ctx.globalAlpha = 1;
+      ctx.save(); ctx.translate(t.i * T + T / 2 + d.dx * T * p, t.j * T + T / 2 + d.dy * T * p); ctx.rotate(t.rot + d.dr * p);
+      ctx.fillStyle = mix(t.c.length === 7 ? t.c : "#ece2cf", RISK[d.risk], Math.min(1, p));
+      const s = t.s * (1 + 0.08 * p); ctx.fillRect(-s / 2, -s / 2, s, s);
+      if (k === sel) { ctx.strokeStyle = "#f2e9d8"; ctx.lineWidth = 6; ctx.strokeRect(-s / 2 + 3, -s / 2 + 3, s - 6, s - 6); }
+      ctx.restore();
+    }
+    if (prod && scan.x >= 0 && scan.x <= FC) {
+      ctx.fillStyle = "rgba(242,233,216,.5)"; ctx.fillRect(scan.x * T - 3, 0, 6, cv.height);
+    }
   });
-});
+  // the detail bar and the list of picks
+  const $ = (k) => sec.querySelector(`[data-d="${k}"]`);
+  const picks = sec.querySelector(".picks"), detail = sec.querySelector(".detail");
+  DRIFTS.forEach((d, k) => {
+    const li = document.createElement("li"), b = document.createElement("button");
+    b.type = "button"; b.textContent = d.name; if (d.risk === "med") b.classList.add("is-med");
+    b.addEventListener("click", () => select(k));
+    li.appendChild(b); picks.appendChild(li);
+  });
+  const select = (k) => {
+    sel = (k + DRIFTS.length) % DRIFTS.length;
+    const d = DRIFTS[sel], med = d.risk === "med";
+    $("name").textContent = d.name; $("s").textContent = d.s; $("p").textContent = d.pr; $("fix").innerHTML = d.fix;
+    $("risk").textContent = med ? "Medium" : "High"; $("risk").classList.toggle("is-med", med);
+    $("tile").classList.toggle("is-med", med); $("n").textContent = `${sel + 1} of ${DRIFTS.length}`;
+    picks.querySelectorAll("button").forEach((b, n) => b.setAttribute("aria-current", String(n === sel)));
+    detail.classList.add("is-swap"); setTimeout(() => detail.classList.remove("is-swap"), 160);
+    draw();
+  };
+  sec.querySelectorAll("[data-step]").forEach((b) => b.addEventListener("click", () => select(sel + Number(b.dataset.step))));
+  // tap the prod floor: pick the nearest tile out of place
+  const prodC = cs.find((c) => c.dataset.floor === "prod");
+  prodC.addEventListener("click", (e) => {
+    const box = prodC.getBoundingClientRect();
+    const x = (e.clientX - box.left) / box.width * FC, y = (e.clientY - box.top) / box.height * FR;
+    let best = -1, bd = 2.2;
+    DRIFTS.forEach((d, k) => { const dd = Math.hypot(d.at[0] + 0.5 + d.dx * d.p - x, d.at[1] + 0.5 + d.dy * d.p - y); if (dd < bd) { bd = dd; best = k; } });
+    if (best >= 0) select(best);
+  });
+  // make them one, and back again
+  const mend = sec.querySelector("[data-mend]"), count = sec.querySelector("[data-count]"), sub = sec.querySelector("[data-count-sub]");
+  let one = false;
+  const settle = (to) => {
+    if (!canAnimate()) { DRIFTS.forEach((d) => (d.p = to)); draw(); return; }
+    anime.remove(DRIFTS);
+    anime({ targets: DRIFTS, p: to, duration: to ? 620 : 520, easing: to ? "easeOutBack" : "easeInOutQuad", delay: anime.stagger(70), update: draw, complete: draw });
+  };
+  mend.addEventListener("click", () => {
+    one = !one;
+    sec.classList.toggle("is-one", one);
+    mend.setAttribute("aria-pressed", String(one));
+    mend.textContent = one ? "Show the drift" : "Make them one";
+    count.textContent = one ? "0 tiles out of place." : "8 tiles out of place in prod.";
+    sub.textContent = one ? "What is, is one." : "5 high risk, 3 medium.";
+    settle(one ? 0 : 1);
+  });
+  select(0);
+  // when the floors come into view, a line passes over prod and lifts what drifted
+  if (!canAnimate()) { DRIFTS.forEach((d) => (d.p = 1)); draw(); return; }
+  draw();
+  const io = new IntersectionObserver((es) => {
+    if (!es[0].isIntersecting) return;
+    io.disconnect();
+    const a = anime({ targets: scan, x: [0, FC + 0.5], duration: 1400, easing: "easeInOutSine", update: draw, complete: () => { scan.x = -1; draw(); } });
+    const b = anime({ targets: DRIFTS, p: [0, 1], duration: 620, easing: "easeOutBack", delay: (d) => 80 + (d.at[0] / FC) * 1400, update: draw });
+    setTimeout(() => { a.pause(); b.pause(); scan.x = -1; if (!one) DRIFTS.forEach((d) => (d.p = 1)); draw(); }, 2800);
+  }, { threshold: 0.4 });
+  io.observe(prodC);
+}
+document.querySelectorAll(".floors").forEach(initFloors);
+
+/* ---------- cracks that run through every floor ---------- */
+function crack(cv) {
+  const ctx = cv.getContext("2d"), T = 40, cols = cv.width / T, rows = cv.height / T;
+  const r = rng(Number(cv.dataset.crack) * 31 + 5), cells = [], seam = [];
+  let s = 2 + Math.floor(r() * (rows - 3));
+  for (let i = 0; i < cols; i++) { seam.push(s); if (r() < 0.6) s = Math.max(1, Math.min(rows - 1, s + (r() < 0.5 ? -1 : 1))); }
+  for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+    const below = j >= seam[i], edge = j === seam[i] || j === seam[i] - 1;
+    cells.push({ i, j, c: STONE[Math.floor(r() * STONE.length)], rot: (r() - 0.5) * 0.1, tilt: below ? (r() - 0.5) * 0.16 : 0, dy: below ? 4 + r() * 3 : 0, gone: edge && r() < 0.18 });
+  }
+  const st = { p: 1 };
+  const draw = () => {
+    ctx.fillStyle = "#2b241e"; ctx.fillRect(0, 0, cv.width, cv.height);
+    const upto = st.p * cols;
+    for (const t of cells) {
+      const on = t.i < upto;
+      if (on && t.gone) continue;
+      ctx.save(); ctx.translate(t.i * T + T / 2, t.j * T + T / 2 + (on ? t.dy : 0)); ctx.rotate(t.rot + (on ? t.tilt : 0));
+      ctx.fillStyle = t.c; ctx.fillRect(-(T - 4) / 2, -(T - 4) / 2, T - 4, T - 4); ctx.restore();
+    }
+    ctx.strokeStyle = "#14110e"; ctx.lineWidth = 9; ctx.lineJoin = "miter"; ctx.beginPath();
+    for (let i = 0; i < Math.min(cols, Math.ceil(upto)); i++) {
+      const x0 = i * T, x1 = Math.min((i + 1) * T, upto * T), y = seam[i] * T + 2;
+      i ? ctx.lineTo(x0, y) : ctx.moveTo(x0, y); ctx.lineTo(x1, y);
+    }
+    if (upto > 0) ctx.stroke();
+  };
+  draw();
+  if (!canAnimate()) return;
+  st.p = 0; draw();
+  const io = new IntersectionObserver((es) => {
+    if (!es[0].isIntersecting) return;
+    io.disconnect();
+    anime({ targets: st, p: 1, duration: 1000, easing: "easeInQuad", delay: 150, update: draw, complete: draw });
+    setTimeout(() => { st.p = 1; draw(); }, 2000);
+  }, { threshold: 0.5 });
+  io.observe(cv);
+}
+document.querySelectorAll("canvas[data-crack]").forEach(crack);
 
 /* ---------- the open dialog ---------- */
 const seg = [...document.querySelectorAll(".ask__seg [role=radio]")];
@@ -183,7 +342,7 @@ ask?.addEventListener("submit", async (e) => {
 
 /* ---------- entrances below the hero ---------- */
 if (!reduce) {
-  const parts = document.querySelectorAll("main .h2, main .lede, .band, .road, .step .card, .step__line, .vault__row, .faq details, .ask, .tiled--close");
+  const parts = document.querySelectorAll("main .h2, main .lede, .floor, .detail, .picks, .floors__foot, .vault__row, .crack, .faq details, .ask, .tiled--close");
   parts.forEach((el, i) => { el.classList.add("rise"); el.style.setProperty("--i", i % 5); });
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px 10% 0px" });
   parts.forEach((el) => io.observe(el));
