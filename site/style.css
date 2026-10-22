@@ -24,7 +24,7 @@ code { font-family: var(--mono); font-size: .82em; color: var(--stone-2); }
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 ::selection { background: var(--terra); color: var(--stone); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.skip { position: absolute; left: 16px; top: -60px; z-index: 50; background: var(--terra); color: var(--stone); padding: 10px 14px; }
+.skip { position: absolute; left: 16px; top: -60px; z-index: 50; background: var(--stone); color: var(--ground); padding: 10px 14px; }
 .skip:focus { top: 12px; }
 
 /* ---------- shared ---------- */
@@ -51,6 +51,9 @@ code { font-family: var(--mono); font-size: .82em; color: var(--stone-2); }
 /* tiled headings: the text stays for readers and search; the canvas is the mosaic */
 .tiled { margin: 0; }
 .tiled canvas { display: block; width: 100%; height: auto; }
+.portrait { position: relative; }
+.portrait.is-laying img { visibility: hidden; }
+.portrait__lay { position: absolute; left: 0; top: 0; pointer-events: none; }
 .tiled.is-tiled .tiled__text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .tiled__text { font: clamp(56px, 7vw, 104px)/1 var(--display); letter-spacing: .04em; text-transform: uppercase; }
 
@@ -96,10 +99,11 @@ code { font-family: var(--mono); font-size: .82em; color: var(--stone-2); }
 .band[data-on] { background: var(--ground-3); }
 .band__line { margin: 0; font: clamp(26px, 1.4rem + 1.8vw, 46px)/1.1 var(--display); color: var(--mute); transition: color .3s; }
 .band[data-on] .band__line { color: var(--stone); }
-.band__result { grid-column: 1; margin: 0; max-height: 0; opacity: 0; overflow: hidden; font: italic 400 20px/1.4 var(--body); color: var(--gold); transition: max-height .3s, opacity .3s, margin .3s; }
-.band[data-on] .band__result { max-height: 4em; opacity: 1; margin-top: 12px; }
+.band__result { grid-column: 1; margin: 12px 0 0; display: none; font: italic 400 20px/1.4 var(--body); color: var(--gold); }
+.band[data-on] .band__result { display: block; animation: result-in .26s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes result-in { from { opacity: 0; transform: translateY(-6px); } }
 .switch { grid-column: 2; grid-row: 1; width: 64px; height: 34px; border: 0; padding: 0; background: #3a322a; position: relative; cursor: pointer; transition: background-color .2s; }
-.switch span { position: absolute; top: 5px; left: 5px; width: 24px; height: 24px; background: var(--mute); transition: transform .2s, background-color .2s; }
+.switch span { position: absolute; top: 5px; left: 5px; width: 24px; height: 24px; background: var(--mute); transition: transform .24s cubic-bezier(.34,1.4,.64,1), background-color .2s; }
 .switch[aria-checked="true"] { background: var(--terra); }
 .switch[aria-checked="true"] span { transform: translateX(30px) rotate(4deg); background: var(--stone); }
 .switch:hover span { background: var(--stone-2); }
@@ -194,16 +198,26 @@ code { font-family: var(--mono); font-size: .82em; color: var(--stone-2); }
 .ask__go { margin-top: 6px; min-height: 48px; border: 0; background: var(--terra); color: var(--stone); font: 17px var(--display); letter-spacing: .04em; cursor: pointer; transition: background-color .15s; }
 .ask__go:hover, .ask__go.is-done { background: var(--terra-2); }
 
-/* ---------- footer ---------- */
-.foot { display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center; padding: 28px var(--pad); background: var(--ground-2); color: var(--mute); font-size: 15px; }
-.foot .wordmark { color: var(--stone); font-size: 17px; }
+/* ---------- drift ticker ---------- */
+.ticker { overflow: hidden; background: var(--ground); padding: 34px 0; }
+.ticker__track { display: flex; width: max-content; animation: ticker 70s linear infinite; }
+.ticker:hover .ticker__track, .ticker.is-off .ticker__track { animation-play-state: paused; }
+.ticker p { margin: 0; padding-right: 36px; white-space: nowrap; font: clamp(30px, 1.2rem + 2.4vw, 54px)/1 var(--display); color: var(--stone); }
+.ticker b { display: inline-block; width: .32em; height: .32em; background: var(--terra-2); margin: 0 .8em; vertical-align: .14em; transform: rotate(4deg); }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+/* ---------- curtain footer: the page lifts off it ---------- */
+.hero, main { position: relative; z-index: 1; background: var(--ground); }
+.foot { position: sticky; bottom: 0; z-index: 0; background: #14110e; padding: clamp(56px, 8vw, 110px) var(--pad) 28px; color: var(--mute); font-size: 15px; }
+.foot__mark { max-width: 1100px; }
+.foot__row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px 24px; margin-top: 40px; }
 .foot__links { display: flex; gap: 22px; flex-wrap: wrap; }
 .foot a { color: var(--stone-2); }
 
 /* ---------- motion ---------- */
-.rise { opacity: 0; transform: translateY(24px); transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i, 0) * 70ms); }
+.rise { opacity: 0; transform: translateY(24px); transition: opacity .45s ease, transform .45s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--i, 0) * 60ms); }
 .rise.is-in { opacity: 1; transform: none; }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } .rise { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } .rise { opacity: 1; transform: none; } .ticker__track { width: auto; } .ticker p { white-space: normal; } .ticker p + p { display: none; } }
 
 /* ---------- the four panels go two by two before they get cramped ---------- */
 @media (max-width: 1200px) {
@@ -241,5 +255,5 @@ code { font-family: var(--mono); font-size: .82em; color: var(--stone-2); }
   .card { margin-top: 0; }
   .vault__row { grid-template-columns: 1fr auto; }
   .vault__row .redact { grid-column: 1 / -1; grid-row: 2; }
-  .foot { grid-template-columns: 1fr; gap: 8px; }
+  .foot__row { flex-direction: column; }
 }

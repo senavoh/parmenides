@@ -131,6 +131,14 @@
   <p class="report__close">“What is, is one. Until production agrees, it remains mere opinion.” <a href="https://github.com/senavoh/parmenides/blob/main/examples/demo-shop-report.md">Read the full report</a></p>
 </section>
 
+<!-- drift ticker: staging, then prod, line after line -->
+<section class="ticker" aria-label="Every drift in the demo run, staging then prod">
+  <div class="ticker__track">
+    <p>Webhook secret present → missing <b></b> Node 20 → 18 <b></b> Postgres 16.4 → 15.8 <b></b> Tests and migrations run → skipped <b></b> CORS one origin → any <b></b> Redis 7.4 → latest <b></b> New checkout on → off <b></b> Timeout 10s → 3s <b></b> </p>
+    <p aria-hidden="true">Webhook secret present → missing <b></b> Node 20 → 18 <b></b> Postgres 16.4 → 15.8 <b></b> Tests and migrations run → skipped <b></b> CORS one origin → any <b></b> Redis 7.4 → latest <b></b> New checkout on → off <b></b> Timeout 10s → 3s <b></b> </p>
+  </div>
+</section>
+
 <!-- how it works: one drift, four panels -->
 <section class="journey" aria-labelledby="journey-h">
   <h2 id="journey-h" class="h2 journey__h">One drift, start to finish.</h2>
@@ -226,11 +234,14 @@
 </main>
 
 <footer class="foot">
-  <span class="wordmark">PARMENIDES</span>
-  <span>Open source · MIT · parmenides.dev</span>
-  <span class="foot__links"><a data-gh href="https://github.com/senavoh/parmenides">GitHub</a><a href="https://github.com/senavoh/parmenides/blob/main/install.sh">install.sh</a><a data-gh-issues href="https://github.com/senavoh/parmenides/issues">Report a drift it missed</a></span>
+  <div class="tiled foot__mark" data-lines="PARMENIDES" aria-hidden="true"></div>
+  <div class="foot__row">
+    <span>Open source · MIT · parmenides.dev</span>
+    <span class="foot__links"><a data-gh href="https://github.com/senavoh/parmenides">GitHub</a><a href="https://github.com/senavoh/parmenides/blob/main/install.sh">install.sh</a><a data-gh-issues href="https://github.com/senavoh/parmenides/issues">Report a drift it missed</a></span>
+  </div>
 </footer>
 
-<script src="main.js?v=3" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js" defer></script>
+<script src="main.js?v=4" defer></script>
 </body>
 </html>
