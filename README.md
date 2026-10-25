@@ -8,6 +8,7 @@
 An agent skill that finds drift between dev, staging and production, ranks every difference by risk, and tells you how to make them one again. It never prints a secret.</p>
 
 <p align="center">
+  <a href="https://parmenides.dev">parmenides.dev</a> ·
   <a href="examples/demo-shop-report.md">Example report</a> ·
   <a href="#install">Install</a> ·
   <a href="#what-it-checks">What it checks</a>
@@ -103,7 +104,6 @@ curl -fsSL https://raw.githubusercontent.com/senavoh/parmenides/main/install.sh 
 - [x] Drift skill for any agent
 - [ ] GitHub Action that fails a PR when environments drift
 - [ ] Drift between live environments (read-only cloud APIs), not just the repo
-- [ ] Site at parmenides.dev
 
 ## License
 
